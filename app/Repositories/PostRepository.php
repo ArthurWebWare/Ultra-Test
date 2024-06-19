@@ -8,26 +8,46 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PostRepository implements PostRepositoryInterface
 {
+    /**
+     * @return Collection
+     */
     public function index(): Collection
     {
         return Post::all();
     }
 
-    public function getById($id)
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getById(int $id)
     {
-        return Post::findOrFail($id);
+        return Post::find($id);
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public function store(array $data)
     {
         return Post::create($data);
     }
 
-    public function update(array $data, $id)
+    /**
+     * @param array $data
+     * @param int $id
+     * @return mixed
+     */
+    public function update(array $data, int $id): mixed
     {
-        return Post::whereId($id)->update($data);
+        return Post::findOrFail($id)->update($data);
     }
 
+    /**
+     * @param $id
+     * @return void
+     */
     public function delete($id): void
     {
         Post::destroy($id);

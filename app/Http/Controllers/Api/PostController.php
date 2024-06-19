@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -49,7 +50,10 @@ class PostController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $user = Auth::user();
         $data = $request->all();
+        $data['user_id'] = $user->id;
+
         $post = $this->postRepository->store($data);
 
         return response()->json($post, 201);
@@ -77,6 +81,10 @@ class PostController extends Controller
     {
         $post = $this->postRepository->getById($id);
 
+        if (is_null($post)) {
+            return response()->json(['error' => 'Not Found'], 404);
+        }
+
         if (Gate::denies('update', $post)) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -96,6 +104,10 @@ class PostController extends Controller
     {
         $post = $this->postRepository->getById($id);
 
+        if (is_null($post)) {
+            return response()->json(['error' => 'Not Found'], 404);
+        }
+
         if (Gate::denies('delete', $post)) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -113,7 +125,6 @@ class PostController extends Controller
     {
         $posts = $user->posts()->paginate(self::POSTS_PER_PAGE);
 
-        // Трансформируем данные
         $posts->getCollection()->transform(function ($post) {
             return [
                 'id' => $post->id,

@@ -4,16 +4,17 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use App\Interfaces\PostRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostRepository implements PostRepositoryInterface
 {
     /**
-     * @return Collection
+     * @param int $perPage
+     * @return LengthAwarePaginator
      */
-    public function index(): Collection
+    public function index(int $perPage = 10): LengthAwarePaginator
     {
-        return Post::all();
+        return Post::paginate($perPage);
     }
 
     /**

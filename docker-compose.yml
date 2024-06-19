@@ -6,10 +6,12 @@ services:
       context: ./docker/nginx
     volumes:
       - ./:/app
-    container_name: ${PROJECT_NAME}-nginx
+    container_name: ${APP_NAME}-nginx
     restart: always
     ports:
       - "8081:80"
+    networks:
+      - laravel
 
   php-fpm:
     build:
@@ -17,7 +19,7 @@ services:
     volumes:
       - ./:/app
     restart: always
-    container_name: ${PROJECT_NAME}-php-fpm
+    container_name: ${APP_NAME}-php-fpm
     depends_on:
       - mysql
       - rabbitmq
@@ -30,7 +32,7 @@ services:
     volumes:
       - ./:/app
     command: sleep 10000
-    container_name: ${PROJECT_NAME}-php-cli
+    container_name: ${APP_NAME}-php-cli
     depends_on:
       - mysql
       - rabbitmq
@@ -42,21 +44,21 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql:/var/lib/mysql
-    container_name: ${PROJECT_NAME}-mysql
+    container_name: ${APP_NAME}-mysql
     restart: always
     ports:
       - "3306:3306"
     environment:
-      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
-      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
-      - "MYSQL_USER=${MYSQL_USER}"
-      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}"
+      - "MYSQL_DATABASE=${DB_DATABASE}"
+      - "MYSQL_USER=${DB_USERNAME}"
+      - "MYSQL_PASSWORD=${DB_PASSWORD}"
     networks:
       - laravel
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: ${PROJECT_NAME}-rabbitmq
+    container_name: ${APP_NAME}-rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"

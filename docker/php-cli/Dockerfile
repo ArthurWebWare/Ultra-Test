@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     librabbitmq-dev \
     && pecl install amqp \
     && docker-php-ext-enable amqp \
-    && docker-php-ext-install pdo pdo_mysql mysqli zip \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip bcmath\
     && apt-get clean
 
 # Install Node.js

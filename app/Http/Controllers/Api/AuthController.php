@@ -50,6 +50,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('LaravelAuthApp')->accessToken;
+
             return response()->json(['token' => $token], 200);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -63,6 +64,7 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->token()->revoke();
+
         return response()->json(['message' => 'Successfully logged out'], 200);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserManagerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,7 +26,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/user/manager', [UserManagerController::class, 'index'])
-    ->middleware('isManager')
+    ->middleware(\App\Http\Middleware\IsManager::class)
     ->name('user-manager');
 
 require __DIR__.'/auth.php';

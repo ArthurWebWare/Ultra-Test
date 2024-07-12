@@ -2,7 +2,7 @@
 
 # Laravel Test Project
 
-## Introduction
+## Introduction 
 
 This is a test project to demonstrate the creation of a small application using the Laravel framework. The project consists of a blog with two main entities: users and posts.
 
